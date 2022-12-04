@@ -32,8 +32,41 @@ class ViewController: UIViewController {
         setupBackgroundView()
         setupTitleLabel()
         setupTableView()
+        
+        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeLeft))
+        swipeLeft.direction = .left
+        
+        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeRight))
+        swipeRight.direction = .right
+        
+        self.view.addGestureRecognizer(swipeRight)
+        self.view.addGestureRecognizer(swipeLeft)
     }
     
+    
+    @objc func didSwipeLeft(_ sender: UISwipeGestureRecognizer) {
+
+        if sender.state == UIGestureRecognizer.State.ended {
+            let location = sender.location(in: self.tableView)
+            if let indexPath = tableView.indexPathForRow(at: location) {
+                if let cell = self.tableView.cellForRow(at: indexPath) as? ExpandableCell {
+                    cell.headerXAnchor.constant = -70
+                }
+            }
+        }
+    }
+    
+    @objc func didSwipeRight(_ sender: UISwipeGestureRecognizer) {
+
+        if sender.state == UIGestureRecognizer.State.ended {
+            let location = sender.location(in: self.tableView)
+            if let indexPath = tableView.indexPathForRow(at: location) {
+                if let cell = self.tableView.cellForRow(at: indexPath) as? ExpandableCell {
+                    cell.headerXAnchor.constant = 0
+                }
+            }
+        }
+    }
 
     
     private func setupTitleLabel() {
@@ -83,6 +116,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.register(ExpandableCell.self, forCellReuseIdentifier: "cell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.isUserInteractionEnabled = true
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -102,7 +136,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = ExpandableCell(style: .default, reuseIdentifier: "cell", rowSize: rowSize)
         cell.data = mockData[indexPath.row]
         cell.selectionStyle = .none
+        cell.isUserInteractionEnabled = true
+        cell.deleteButton.addTarget(self, action: #selector(onDelete), for: .touchUpInside)
+        cell.deleteButton.tag = indexPath.row
         return cell
+    }
+    
+    @objc func onDelete(sender:UIButton!) {
+        let index = sender.tag
+        mockData.remove(at: index)
+        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .none)
+        
+        // recalculte indexes
+        for cell in tableView.visibleCells as! [ExpandableCell] {
+            if cell.deleteButton.tag > index {
+                cell.deleteButton.tag -= 1
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -123,5 +173,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell?.isExpanded = true
         }
     }
+    
+    
     
 }

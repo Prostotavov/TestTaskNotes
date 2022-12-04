@@ -14,6 +14,7 @@ struct CellData {
 }
 
 class ExpandableCell: UITableViewCell {
+
     
     var isExpanded: Bool? {
         didSet {
@@ -73,6 +74,12 @@ class ExpandableCell: UITableViewCell {
         return label
     }()
     
+    fileprivate let backHeaderView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     fileprivate let headerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -114,6 +121,14 @@ class ExpandableCell: UITableViewCell {
         return view
     }()
     
+    let deleteButton: UIButton = {
+        let button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = .systemRed
+        button.layer.cornerRadius = 10
+        return button
+    }()
+    
     //MARK: Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -129,7 +144,9 @@ class ExpandableCell: UITableViewCell {
         self.rowSize = rowSize
         
         setupContainerView()
+        setupBackHeaderView()
         setupHeaderView(rowSize: rowSize)
+        setupDeleteButton()
         setupLineView()
         setupTittleLabel()
         setupShortDescriptionLabel()
@@ -137,6 +154,8 @@ class ExpandableCell: UITableViewCell {
         setupChevronView()
         setupBottomLineView()
     }
+    
+
     
     //MARK: constraints
     
@@ -150,18 +169,32 @@ class ExpandableCell: UITableViewCell {
         ])
     }
     
-    fileprivate func setupHeaderView(rowSize: CGSize) {
-        containerView.addSubview(headerView)
+    fileprivate func setupBackHeaderView() {
+        containerView.addSubview(backHeaderView)
         NSLayoutConstraint.activate([
-            headerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            headerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            headerView.widthAnchor.constraint(equalToConstant: rowSize.width),
-            headerView.heightAnchor.constraint(equalToConstant: rowSize.height),
+            backHeaderView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor, constant: 0),
+            backHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            backHeaderView.widthAnchor.constraint(equalToConstant: rowSize.width),
+            backHeaderView.heightAnchor.constraint(equalToConstant: rowSize.height),
         ])
-        headerView.transform = CGAffineTransform(scaleX: 0.87, y: 0.87)
+        backHeaderView.transform = CGAffineTransform(scaleX: 0.87, y: 0.87)
     }
     
+    var headerXAnchor : NSLayoutConstraint = NSLayoutConstraint()
     
+    fileprivate func setupHeaderView(rowSize: CGSize) {
+        backHeaderView.addSubview(headerView)
+        
+        
+        headerXAnchor = headerView.centerXAnchor.constraint(equalTo: backHeaderView.centerXAnchor, constant: 0)
+        
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: backHeaderView.topAnchor),
+            headerView.bottomAnchor.constraint(equalTo: backHeaderView.bottomAnchor),
+            headerView.widthAnchor.constraint(equalTo: backHeaderView.widthAnchor),
+            headerXAnchor,
+        ])
+    }
     
     fileprivate func setupTittleLabel() {
         headerView.addSubview(tittleLabel)
@@ -219,6 +252,16 @@ class ExpandableCell: UITableViewCell {
             bottomLineView.widthAnchor.constraint(equalToConstant: self.frame.width),
         ])
         bottomLineView.isHidden = true
+    }
+    
+    fileprivate func setupDeleteButton() {
+        backHeaderView.addSubview(deleteButton)
+        NSLayoutConstraint.activate([
+            deleteButton.trailingAnchor.constraint(equalTo: backHeaderView.trailingAnchor),
+            deleteButton.leadingAnchor.constraint(equalTo: headerView.trailingAnchor),
+            deleteButton.topAnchor.constraint(equalTo: backHeaderView.topAnchor),
+            deleteButton.bottomAnchor.constraint(equalTo: backHeaderView.bottomAnchor),
+        ])
     }
     
     
