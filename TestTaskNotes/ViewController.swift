@@ -15,14 +15,18 @@ class ViewController: UIViewController {
     let titleLabel = UILabel()
     
     
-    let mockData = [CellData(tittle: "1 1 1", content: "one one one"),
+    var mockData = [CellData(tittle: "1 1 1", content: "one one one"),
                     CellData(tittle: "2 2 2", content: "two two two "),
-                    CellData(tittle: "3 3 3", content: "three three three "),]
+                    CellData(tittle: "3 3 3", content: "three three three dfsf f sdf sadf sadf asdf ds fds f asdf ghfhjf ghfhfhfhgf fghf hf hf gf hjgfghfhg fg fghf hgf hjfhgf hfgh fh gfhg fjhg fjhg fjhg fjg fjgf jghf jgf jf hgjf ghf hjf hgf hgf jhfg hgf hj fhjgf hg f"),]
     
     let backHeight: CGFloat = 170
+    var rowSize: CGSize!
     var selectedIndex: IndexPath?
 
     override func viewDidLoad() {
+        
+        rowSize = CGSize(width: view.frame.width, height: 50)
+        
         super.viewDidLoad()
         view.backgroundColor = .white
         setupBackgroundView()
@@ -82,10 +86,12 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
         if selectedIndex == indexPath {
-            return 200
+            guard let cell = tableView.cellForRow(at: indexPath) as? ExpandableCell else {return rowSize.height}
+            return cell.contentHeight! + rowSize.height + 20 
         }
-        return 50
+        return rowSize.height
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -93,18 +99,29 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! ExpandableCell
+        let cell = ExpandableCell(style: .default, reuseIdentifier: "cell", rowSize: rowSize)
         cell.data = mockData[indexPath.row]
         cell.selectionStyle = .none
-        cell.animate()
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedIndex = indexPath
-        tableView.beginUpdates()
-        tableView.reloadRows(at: [selectedIndex!], with: .none)
-        tableView.endUpdates()
+        
+        let oldCell = tableView.cellForRow(at: indexPath) as? ExpandableCell
+        
+        if oldCell?.isExpanded == true {
+            selectedIndex = nil
+            tableView.beginUpdates()
+            tableView.reloadRows(at: [indexPath], with: .none)
+            tableView.endUpdates()
+        } else {
+            selectedIndex = indexPath
+            tableView.beginUpdates()
+            tableView.reloadRows(at: [selectedIndex!], with: .none)
+            tableView.endUpdates()
+            let cell = tableView.cellForRow(at: indexPath) as? ExpandableCell
+            cell?.isExpanded = true
+        }
     }
     
 }

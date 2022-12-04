@@ -16,6 +16,7 @@
 		870448A7293C10C1006607F9 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870448A6293C10C1006607F9 /* UIColorExtension.swift */; };
 		870448A9293C10E6006607F9 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870448A8293C10E6006607F9 /* Colors.swift */; };
 		870448AB293C1A1D006607F9 /* ExpandableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870448AA293C1A1D006607F9 /* ExpandableCell.swift */; };
+		870448AF293C417A006607F9 /* UILabelSize+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 870448AE293C417A006607F9 /* UILabelSize+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		870448A6293C10C1006607F9 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		870448A8293C10E6006607F9 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		870448AA293C1A1D006607F9 /* ExpandableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandableCell.swift; sourceTree = "<group>"; };
+		870448AE293C417A006607F9 /* UILabelSize+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabelSize+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +71,7 @@
 				870448A4293C0A5F006607F9 /* BackgroundView.swift */,
 				870448A8293C10E6006607F9 /* Colors.swift */,
 				870448A6293C10C1006607F9 /* UIColorExtension.swift */,
+				870448AE293C417A006607F9 /* UILabelSize+Extension.swift */,
 				87044899293C099D006607F9 /* Assets.xcassets */,
 				8704489B293C099D006607F9 /* LaunchScreen.storyboard */,
 				8704489E293C099D006607F9 /* Info.plist */,
@@ -153,6 +156,7 @@
 				870448A5293C0A5F006607F9 /* BackgroundView.swift in Sources */,
 				87044893293C099A006607F9 /* SceneDelegate.swift in Sources */,
 				870448AB293C1A1D006607F9 /* ExpandableCell.swift in Sources */,
+				870448AF293C417A006607F9 /* UILabelSize+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
